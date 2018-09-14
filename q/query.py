@@ -12,6 +12,9 @@ class Query(ABC, Generic[T], Iterable[T]):
     
     @abstractmethod
     def with_number(self) -> "Query[Tuple[int, T]]": ...
+    
+    @abstractmethod
+    def select(self, selector: Callable[[T], TValue]) -> "Query[TValue]": ...
 
     @abstractmethod
     def where(self, condition: Callable[[T], bool]) -> "Query[T]": ...
