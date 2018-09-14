@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Generic, List, TypeVar, Iterable, overload, Callable, Dict
+from typing import Generic, List, TypeVar, Iterable, overload, Callable, Dict, Set, Tuple
 
 T = TypeVar('T')
 TKey = TypeVar('TKey')
@@ -15,6 +15,12 @@ class Query(ABC, Generic[T], Iterable[T]):
 
     @abstractmethod
     def to_list(self) -> List[T]: ...
+
+    @abstractmethod
+    def to_set(self) -> Set[T]: ...
+
+    @abstractmethod
+    def to_tuple(self) -> Tuple[T, ...]: ...
 
     @overload
     def to_dict(self, key_selector: Callable[[T], TKey]) -> Dict[TKey, T]: ...

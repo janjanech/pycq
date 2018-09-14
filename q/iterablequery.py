@@ -18,6 +18,12 @@ class IterableQuery(Generic[T], Query[T]):
     def to_list(self):
         return list(self.__iterable)
 
+    def to_set(self):
+        return set(self.__iterable)
+
+    def to_tuple(self):
+        return tuple(self.__iterable)
+
     def to_dict(self, key_selector, value_selector=None):
         if value_selector is None:
             return {key_selector(i): i for i in self.__iterable}
