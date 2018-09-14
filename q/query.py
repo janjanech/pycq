@@ -1,7 +1,9 @@
 from abc import ABC, abstractmethod
-from typing import Generic, List, TypeVar, Iterable, Iterator
+from typing import Generic, List, TypeVar, Iterable, overload, Callable, Dict
 
 T = TypeVar('T')
+TKey = TypeVar('TKey')
+TValue = TypeVar('TValue')
 
 
 class Query(ABC, Generic[T], Iterable[T]):
@@ -10,3 +12,12 @@ class Query(ABC, Generic[T], Iterable[T]):
 
     @abstractmethod
     def to_list(self) -> List[T]: ...
+
+    @overload
+    def to_dict(self, key_selector: Callable[[T], TKey]) -> Dict[TKey, T]: ...
+
+    @overload
+    def to_dict(self, key_selector: Callable[[T], TKey], value_selector: Callable[[T], TValue]) -> Dict[TKey, TValue]: ...
+
+    @abstractmethod
+    def to_dict(self, key_selector, value_selector=None): ...

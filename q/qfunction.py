@@ -1,5 +1,5 @@
 from itertools import repeat, count
-from typing import Union, TypeVar, Iterable, Iterator, Generic, Optional, Any
+from typing import Union, TypeVar, Iterable, Iterator, Optional, Any
 
 from .iterablehelper import IterableHelper
 from .query import Query
