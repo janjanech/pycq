@@ -12,6 +12,9 @@ class IterableQuery(Generic[T], Query[T]):
     def __iter__(self):
         return iter(self.__iterable)
 
+    def where(self, condition):
+        return IterableQuery(i for i in self.__iterable if condition(i))
+
     def to_list(self):
         return list(self.__iterable)
 

@@ -3,7 +3,7 @@ import unittest
 from q import Q
 
 
-class MyTestCase(unittest.TestCase):
+class Statics(unittest.TestCase):
     def test_empty(self):
         self.assertSequenceEqual(Q.empty().to_list(), [])
 

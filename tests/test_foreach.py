@@ -4,7 +4,7 @@ from itertools import zip_longest
 from q import Q
 
 
-class MyTestCase(unittest.TestCase):
+class ForEach(unittest.TestCase):
     def test_something(self):
         data = (1, 2, 3)
         ret = Q(data)
