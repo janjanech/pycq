@@ -30,6 +30,17 @@ class IterableQuery(Generic[T], Query[T]):
                 cnt += 1
             return cnt
 
+    def any(self, condition=None):
+        if condition is None:
+            for i in self.__iterable:
+                return True
+            return False
+        else:
+            return any(condition(i) for i in self.__iterable)
+
+    def all(self, condition):
+        return all(condition(i) for i in self.__iterable)
+
     def to_list(self):
         return list(self.__iterable)
 

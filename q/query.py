@@ -9,18 +9,24 @@ TValue = TypeVar('TValue')
 class Query(ABC, Generic[T], Iterable[T]):
     def __query__(self) -> "Query[T]":
         return self
-    
+
     @abstractmethod
     def with_number(self) -> "Query[Tuple[int, T]]": ...
-    
+
     @abstractmethod
     def select(self, selector: Callable[[T], TValue]) -> "Query[TValue]": ...
 
     @abstractmethod
     def where(self, condition: Callable[[T], bool]) -> "Query[T]": ...
-    
+
     @abstractmethod
     def count(self) -> int: ...
+
+    @abstractmethod
+    def any(self, condition: Callable[[T], bool] = None) -> bool: ...
+
+    @abstractmethod
+    def all(self, condition: Callable[[T], bool]) -> bool: ...
 
     @abstractmethod
     def to_list(self) -> List[T]: ...
