@@ -18,6 +18,9 @@ class Query(ABC, Generic[T], Iterable[T]):
 
     @abstractmethod
     def where(self, condition: Callable[[T], bool]) -> "Query[T]": ...
+    
+    @abstractmethod
+    def count(self) -> int: ...
 
     @abstractmethod
     def to_list(self) -> List[T]: ...

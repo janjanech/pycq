@@ -1,4 +1,4 @@
-from typing import Generic, Iterable, TypeVar
+from typing import Generic, Iterable, TypeVar, Sized
 
 from .query import Query
 
@@ -20,6 +20,15 @@ class IterableQuery(Generic[T], Query[T]):
 
     def where(self, condition):
         return IterableQuery(i for i in self.__iterable if condition(i))
+
+    def count(self):
+        if isinstance(self.__iterable, Sized):
+            return len(self.__iterable)
+        else:
+            cnt = 0
+            for i in self.__iterable:
+                cnt += 1
+            return cnt
 
     def to_list(self):
         return list(self.__iterable)
