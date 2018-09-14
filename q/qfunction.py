@@ -9,6 +9,9 @@ T = TypeVar('T')
 
 
 class QFunction:
+    def __init__(self, *args):
+        pass
+
     def __call__(self, collection: Union[Queryable[T], Iterable[T], Iterator[T]]) -> Query[T]:
         if isinstance(collection, Queryable):
             return collection.__query__()
@@ -20,6 +23,8 @@ class QFunction:
             raise TypeError('collection parameter of Q() function has to be Queryable, Iterable, or Iterator')
 
 
-Q = QFunction()
+class Q(metaclass=QFunction):
+    def __new__(cls, collection: Union[Queryable[T], Iterable[T], Iterator[T]]) -> Query[T]: ...
+
 
 __ALL__ = ['Q']
