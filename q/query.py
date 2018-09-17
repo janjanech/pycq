@@ -45,3 +45,6 @@ class Query(ABC, Generic[T], Iterable[T]):
 
     @abstractmethod
     def to_dict(self, key_selector, value_selector=None): ...
+    
+    @abstractmethod
+    def join(self, separator: str) -> str: ...

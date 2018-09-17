@@ -32,11 +32,17 @@ class QFunction:
     def range(self, start: int, count: int) -> Query[int]:
         return self(range(start, start + count))
 
-    def repeat(self, element: T, count: Optional[int] = None) -> Query[T]:
+    def repeat(self, element: T, count: int = None) -> Query[T]:
         if count is None:
             return self(repeat(element))
         else:
             return self(repeat(element, count))
+
+    def split(self, string: str, separator: Optional[str], count: int = None) -> Query[str]:
+        if count is None:
+            return self(string.split(separator))
+        else:
+            return self(string.split(separator, count))
 
 
 class Q(metaclass=QFunction):
@@ -53,6 +59,9 @@ class Q(metaclass=QFunction):
 
     @staticmethod
     def repeat(element: T, count: Optional[int] = None) -> Query[T]: ...
+    
+    @staticmethod
+    def split(string: str, separator: Optional[str], count: int = None) -> Query[str]: ...
 
 
 __ALL__ = ['Q']

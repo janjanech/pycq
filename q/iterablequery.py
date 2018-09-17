@@ -55,3 +55,6 @@ class IterableQuery(Generic[T], Query[T]):
             return {key_selector(i): i for i in self.__iterable}
         else:
             return {key_selector(i): value_selector(i) for i in self.__iterable}
+
+    def join(self, separator):
+        return separator.join(self.__iterable)
