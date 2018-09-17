@@ -1,4 +1,5 @@
 from functools import reduce
+from itertools import chain
 from typing import Generic, Iterable, TypeVar, Sized
 
 from .query import Query
@@ -24,6 +25,9 @@ class IterableQuery(Generic[T], Query[T]):
 
     def select(self, selector):
         return IterableQuery(selector(i) for i in self.__iterable)
+
+    def select_many(self, selector):
+        return IterableQuery(chain.from_iterable(selector(i) for i in self.__iterable))
 
     def where(self, condition):
         return IterableQuery(i for i in self.__iterable if condition(i))
