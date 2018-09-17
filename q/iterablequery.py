@@ -1,3 +1,4 @@
+from collections import namedtuple
 from functools import reduce
 from itertools import chain
 from typing import Generic, Iterable, TypeVar, Sized
@@ -5,6 +6,8 @@ from typing import Generic, Iterable, TypeVar, Sized
 from .query import Query
 
 T = TypeVar('T')
+
+NumberedItem = namedtuple('NumberedItem', ['no', 'item'])
 
 
 class IterableQuery(Generic[T], Query[T]):
@@ -15,7 +18,7 @@ class IterableQuery(Generic[T], Query[T]):
         return iter(self.__iterable)
 
     def with_number(self):
-        return IterableQuery(enumerate(self.__iterable))
+        return IterableQuery(NumberedItem(no, item) for no, item in enumerate(self.__iterable))
 
     def reduce(self, func_or_initializer, func_if_initializer_given=None):
         if func_if_initializer_given is not None:

@@ -1,9 +1,14 @@
 from abc import ABC, abstractmethod
-from typing import Generic, List, TypeVar, Iterable, overload, Callable, Dict, Set, Tuple, Type
+from typing import Generic, List, TypeVar, Iterable, overload, Callable, Dict, Set, Tuple, Type, NamedTuple
 
 T = TypeVar('T')
 TKey = TypeVar('TKey')
 TValue = TypeVar('TValue')
+
+
+class NumberedItem(Generic[T]):
+    no: int
+    item: T
 
 
 class Query(ABC, Generic[T], Iterable[T]):
@@ -11,7 +16,7 @@ class Query(ABC, Generic[T], Iterable[T]):
         return self
 
     @abstractmethod
-    def with_number(self) -> "Query[Tuple[int, T]]": ...
+    def with_number(self) -> "Query[NumberedItem[T]]": ...
 
     @overload
     def reduce(self, func: Callable[[T, T], T]) -> T: ...
