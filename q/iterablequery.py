@@ -58,6 +58,18 @@ class IterableQuery(Generic[T], Query[T]):
     def all(self, condition):
         return all(condition(i) for i in self.__iterable)
 
+    def prepend_all(self, iterable):
+        return IterableQuery(chain(iterable, self.__iterable))
+
+    def prepend(self, value):
+        return IterableQuery(chain((value, ), self.__iterable))
+
+    def append_all(self, iterable):
+        return IterableQuery(chain(self.__iterable, iterable))
+
+    def append(self, value):
+        return IterableQuery(chain(self.__iterable, (value, )))
+
     def to_list(self):
         return list(self.__iterable)
 
