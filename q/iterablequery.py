@@ -1,6 +1,6 @@
 from collections import namedtuple
 from functools import reduce
-from itertools import chain
+from itertools import chain, zip_longest
 from typing import Generic, Iterable, TypeVar, Sized
 
 from .query import Query
@@ -115,6 +115,12 @@ class IterableQuery(Generic[T], Query[T]):
             if i in values:
                 return True
         return False
+
+    def sequence_equal(self, iterable):
+        for a, b in zip_longest(self.__iterable, iterable, fillvalue=object()):
+            if a != b:
+                return False
+        return True
 
     def prepend_all(self, iterable):
         return IterableQuery(chain(iterable, self.__iterable))

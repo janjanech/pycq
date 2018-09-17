@@ -97,6 +97,9 @@ class Query(ABC, Generic[T], Iterable[T]):
     def contains_any(self, iterable: Iterable[T]) -> bool: ...
 
     @abstractmethod
+    def sequence_equal(self, iterable: Iterable[T]) -> bool: ...
+
+    @abstractmethod
     def prepend_all(self, iterable: Iterable[T]) -> "Query[T]": ...
 
     @abstractmethod
