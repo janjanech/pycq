@@ -8,7 +8,7 @@ You can think of it as the LINQ for Python.
 Comparision with other libraries
 --------------------------------
 
-=== List comprehensions
+### List comprehensions
 
 Why should you use this instead of standard list comprehensions? Okay,
 it is quite a good question. List comprehensions/generators are powerful
@@ -66,7 +66,7 @@ categories = Q(products)\
     ))
 ```
 
-=== py_linq
+### py_linq
 
 Yea, I know about [py_linq](https://github.com/viralogic/py-enumerable)
 project. But it seems that this project has been stalled for a while. And its
