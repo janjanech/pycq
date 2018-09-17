@@ -1,3 +1,4 @@
+from functools import reduce
 from typing import Generic, Iterable, TypeVar, Sized
 
 from .query import Query
@@ -14,6 +15,12 @@ class IterableQuery(Generic[T], Query[T]):
 
     def with_number(self):
         return IterableQuery(enumerate(self.__iterable))
+
+    def reduce(self, func_or_initializer, func_if_initializer_given=None):
+        if func_if_initializer_given is not None:
+            return reduce(func_if_initializer_given, self.__iterable, func_or_initializer)
+        else:
+            return reduce(func_or_initializer, self.__iterable)
 
     def select(self, selector):
         return IterableQuery(selector(i) for i in self.__iterable)
