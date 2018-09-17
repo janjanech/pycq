@@ -100,6 +100,9 @@ class Query(ABC, Generic[T], Iterable[T]):
     def sequence_equal(self, iterable: Iterable[T]) -> bool: ...
 
     @abstractmethod
+    def default_if_empty(self, default: T) -> "Query[T]": ...
+
+    @abstractmethod
     def prepend_all(self, iterable: Iterable[T]) -> "Query[T]": ...
 
     @abstractmethod

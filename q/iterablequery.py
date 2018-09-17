@@ -122,6 +122,21 @@ class IterableQuery(Generic[T], Query[T]):
                 return False
         return True
 
+    def default_if_empty(self, default):
+        return IterableQuery(self.__exec_default_if_empty(default))
+
+    def __exec_default_if_empty(self, default):
+        it = iter(self.__iterable)
+        has_value = False
+        while True:
+            try:
+                yield next(it)
+                has_value = True
+            except StopIteration:
+                break
+        if not has_value:
+            yield default
+
     def prepend_all(self, iterable):
         return IterableQuery(chain(iterable, self.__iterable))
 
