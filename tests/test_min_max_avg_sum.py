@@ -4,7 +4,7 @@ from typing import cast
 from q import Q
 
 
-class Casts(unittest.TestCase):
+class MinMaxAvgSum(unittest.TestCase):
     def test_min(self):
         data = [1, 2, 3]
         ret = Q(data).min()

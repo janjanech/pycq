@@ -94,6 +94,28 @@ class IterableQuery(Generic[T], Query[T]):
     def all(self, condition):
         return all(condition(i) for i in self.__iterable)
 
+    def contains(self, value):
+        for i in self.__iterable:
+            if i == value:
+                return True
+        return False
+
+    def contains_all(self, iterable):
+        values = set(iterable)
+        for i in self.__iterable:
+            if i in values:
+                values.remove(i)
+                if not values:
+                    return True
+        return False
+
+    def contains_any(self, iterable):
+        values = frozenset(iterable)
+        for i in self.__iterable:
+            if i in values:
+                return True
+        return False
+
     def prepend_all(self, iterable):
         return IterableQuery(chain(iterable, self.__iterable))
 
