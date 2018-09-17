@@ -47,6 +47,39 @@ class IterableQuery(Generic[T], Query[T]):
                 cnt += 1
             return cnt
 
+    def sum(self, selector=None):
+        if selector is None:
+            return sum(self.__iterable)
+        else:
+            return sum(selector(i) for i in self.__iterable)
+
+    def average(self, selector=None):
+        current_sum = 0
+        current_count = 0
+
+        if selector is None:
+            for item in self.__iterable:
+                current_sum += item
+                current_count += 1
+        else:
+            for item in self.__iterable:
+                current_sum += selector(item)
+                current_count += 1
+
+        return current_sum / current_count
+
+    def min(self, selector=None):
+        if selector is None:
+            return min(self.__iterable)
+        else:
+            return min(selector(i) for i in self.__iterable)
+
+    def max(self, selector=None):
+        if selector is None:
+            return max(self.__iterable)
+        else:
+            return max(selector(i) for i in self.__iterable)
+
     def any(self, condition=None):
         if condition is None:
             for i in self.__iterable:
