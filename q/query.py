@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Generic, List, TypeVar, Iterable, overload, Callable, Dict, Set, Tuple
+from typing import Generic, List, TypeVar, Iterable, overload, Callable, Dict, Set, Tuple, Type
 
 T = TypeVar('T')
 TKey = TypeVar('TKey')
@@ -30,6 +30,12 @@ class Query(ABC, Generic[T], Iterable[T]):
 
     @abstractmethod
     def where(self, condition: Callable[[T], bool]) -> "Query[T]": ...
+
+    @abstractmethod
+    def cast(self, type: Type[TValue]) -> "Query[TValue]": ...
+
+    @abstractmethod
+    def of_type(self, type: Type[TValue]) -> "Query[TValue]": ...
 
     @abstractmethod
     def count(self) -> int: ...

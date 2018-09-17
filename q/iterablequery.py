@@ -32,6 +32,12 @@ class IterableQuery(Generic[T], Query[T]):
     def where(self, condition):
         return IterableQuery(i for i in self.__iterable if condition(i))
 
+    def cast(self, type):
+        return IterableQuery(type(i) for i in self.__iterable)
+
+    def of_type(self, type):
+        return IterableQuery(i for i in self.__iterable if isinstance(i, type))
+
     def count(self):
         if isinstance(self.__iterable, Sized):
             return len(self.__iterable)
