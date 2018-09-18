@@ -77,11 +77,45 @@ class IterableQuery(Generic[T], Query[T]):
         else:
             return min(selector(i) for i in self.__iterable)
 
+    def having_min(self, selector):
+        min_value = None
+        min_items = None
+
+        for item in self.__iterable:
+            value = selector(item)
+            if min_value is None or value < min_value:
+                min_items = [item]
+                min_value = value
+            elif min_value == value:
+                min_items.append(item)
+
+        if min_items is None:
+            raise ValueError("sequence was empty")
+
+        return IterableQuery(min_items)
+
     def max(self, selector=None):
         if selector is None:
             return max(self.__iterable)
         else:
             return max(selector(i) for i in self.__iterable)
+
+    def having_max(self, selector):
+        max_value = None
+        max_items = None
+
+        for item in self.__iterable:
+            value = selector(item)
+            if max_value is None or value > max_value:
+                max_items = [item]
+                max_value = value
+            elif max_value == value:
+                max_items.append(item)
+
+        if max_items is None:
+            raise ValueError("sequence was empty")
+
+        return IterableQuery(max_items)
 
     def any(self, condition=None):
         if condition is None:

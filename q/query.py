@@ -72,6 +72,9 @@ class Query(ABC, Generic[T], Iterable[T]):
     @abstractmethod
     def min(self, selector=None): ...
 
+    @abstractmethod
+    def having_min(self, selector: Callable[[T], TValue]) -> "Query[T]": ...
+
     @overload
     def max(self) -> T: ...
 
@@ -80,6 +83,9 @@ class Query(ABC, Generic[T], Iterable[T]):
 
     @abstractmethod
     def max(self, selector=None): ...
+
+    @abstractmethod
+    def having_max(self, selector: Callable[[T], TValue]) -> "Query[T]": ...
 
     @abstractmethod
     def any(self, condition: Callable[[T], bool] = None) -> bool: ...
