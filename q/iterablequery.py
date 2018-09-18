@@ -117,6 +117,41 @@ class IterableQuery(Generic[T], Query[T]):
 
         return IterableQuery(max_items)
 
+    def first(self, condition=None):
+        for i in self.__iterable:
+            if condition is None or condition(i):
+                return i
+
+        raise ValueError("sequence was empty")
+
+    def first_or_default(self, default, condition=None):
+        for i in self.__iterable:
+            if condition is None or condition(i):
+                return i
+
+        return default
+
+    def last(self, condition=None):
+        last_value = marker = object()
+
+        for i in self.__iterable:
+            if condition is None or condition(i):
+                last_value = i
+
+        if last_value is marker:
+            raise ValueError("sequence was empty")
+
+        return last_value
+
+    def last_or_default(self, default, condition=None):
+        last_value = default
+
+        for i in self.__iterable:
+            if condition is None or condition(i):
+                last_value = i
+
+        return last_value
+
     def any(self, condition=None):
         if condition is None:
             for i in self.__iterable:
