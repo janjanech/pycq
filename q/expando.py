@@ -12,3 +12,4 @@ class Expando:
     def __setattr__(self, key, value):
         if self.__ro:
             raise AttributeError("attribute '{0}' of 'Obj' objects is not writable")
+        super().__setattr__(key, value)
