@@ -1,7 +1,7 @@
 from collections import namedtuple
 from functools import reduce
 from itertools import chain, zip_longest
-from typing import Generic, Iterable, TypeVar, Sized
+from typing import Generic, Iterable, TypeVar, Sized, Reversible
 
 from .query import Query
 
@@ -217,6 +217,12 @@ class IterableQuery(Generic[T], Query[T]):
 
     def append(self, value):
         return IterableQuery(chain(self.__iterable, (value, )))
+
+    def reverse(self):
+        if isinstance(self.__iterable, Reversible):
+            return IterableQuery(reversed(self.__iterable))
+        else:
+            return IterableQuery(reversed(list(self.__iterable)))
 
     def to_list(self):
         return list(self.__iterable)

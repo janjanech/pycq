@@ -167,6 +167,9 @@ class Query(ABC, Generic[T], Iterable[T]):
     def append(self, value: T) -> "Query[T]": ...
 
     @abstractmethod
+    def reverse(self) -> "Query[T]": ...
+
+    @abstractmethod
     def to_list(self) -> List[T]: ...
 
     @abstractmethod
