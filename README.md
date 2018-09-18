@@ -59,10 +59,9 @@ products = self.GetProducts()
 
 categories = Q(products)\
     .group_by(lambda p: p.category)\
-    .select(lambda g: Obj(max_price=g.max(lambda p: p.unit_price), category=g.key, products=g.items))\
     .select(lambda g: Obj(
-        category=g.category,
-        most_expansive_products=g.products.where(lambda p: p.unit_price == g.max_price)
+        category=g.key,
+        most_expansive_products=g.products.having_max(lambda p: p.unit_price)
     ))
 ```
 
