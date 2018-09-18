@@ -8,12 +8,17 @@ except ImportError:
 from abc import abstractmethod
 from typing import Generic, List, TypeVar, Iterable, overload, Callable, Dict, Set, Tuple, Type, TYPE_CHECKING
 
-if TYPE_CHECKING:
-    from .numbereditem import NumberedItem
-
 T = TypeVar('T')
 TKey = TypeVar('TKey')
 TValue = TypeVar('TValue')
+
+
+class NumberedItem(Generic[T]):
+    @property
+    def no(self) -> int: return 0
+
+    @property
+    def item(self) -> T: return None
 
 
 class Query(ABC, Generic[T], Iterable[T]):
@@ -142,6 +147,6 @@ class Query(ABC, Generic[T], Iterable[T]):
 
     @abstractmethod
     def to_dict(self, key_selector, value_selector=None): ...
-    
+
     @abstractmethod
     def join(self, separator: str) -> str: ...
