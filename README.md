@@ -1,6 +1,8 @@
 Python collection queries - pycq
 ================================
 
+[![Build Status](https://travis-ci.org/janusko/pycq.svg?branch=master)](https://travis-ci.org/janusko/pycq)
+
 pycq is simple software library helping with processing collections
 in Python 3. You can search, transform and process any iterator in Python.
 You can think of it as the LINQ for Python.
