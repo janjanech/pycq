@@ -54,12 +54,12 @@ var categories =
 In pycq, you can write the query in a similar manner (Obj and group_by will
 by added in a near future):
 ```python
-from q import Q, Obj
+from q import Q, Expando
 products = self.GetProducts()
 
 categories = Q(products)\
     .group_by(lambda p: p.category)\
-    .select(lambda g: Obj(
+    .select(lambda g: Expando(
         category=g.key,
         most_expansive_products=g.products.having_max(lambda p: p.unit_price)
     ))
