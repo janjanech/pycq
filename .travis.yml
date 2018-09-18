@@ -1,7 +1,5 @@
 language: python
 python:
-  - "3.2"
-  - "3.3"
   - "3.4"
   - "3.5"
   - "3.6"
@@ -12,7 +10,6 @@ matrix:
       dist: xenial
       sudo: true
 install:
-  - pip install setuptools -U
   - pip install -r requirements.txt
   - pip install .
 script: python -m unittest discover
