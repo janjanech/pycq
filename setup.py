@@ -20,5 +20,8 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    test_suite="tests"
+    test_suite="tests",
+    install_requires=[
+        'typing;python_version<"3.5"',
+    ]
 )

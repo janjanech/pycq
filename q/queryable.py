@@ -1,4 +1,11 @@
-from abc import ABC, abstractmethod
+try:
+    from abc import ABC
+except ImportError:
+    from abc import ABCMeta
+
+    class ABC(metaclass=ABCMeta): pass
+
+from abc import abstractmethod
 from typing import TypeVar, Generic
 
 from .query import Query

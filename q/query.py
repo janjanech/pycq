@@ -1,14 +1,19 @@
-from abc import ABC, abstractmethod
-from typing import Generic, List, TypeVar, Iterable, overload, Callable, Dict, Set, Tuple, Type, NamedTuple
+try:
+    from abc import ABC
+except ImportError:
+    from abc import ABCMeta
+
+    class ABC(metaclass=ABCMeta): pass
+
+from abc import abstractmethod
+from typing import Generic, List, TypeVar, Iterable, overload, Callable, Dict, Set, Tuple, Type, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .numbereditem import NumberedItem
 
 T = TypeVar('T')
 TKey = TypeVar('TKey')
 TValue = TypeVar('TValue')
-
-
-class NumberedItem(Generic[T]):
-    no: int
-    item: T
 
 
 class Query(ABC, Generic[T], Iterable[T]):
