@@ -33,6 +33,9 @@ class IterableQuery(Generic[T], Query[T]):
     def select_many(self, selector):
         return IterableQuery(chain.from_iterable(selector(i) for i in self.__iterable))
 
+    def chain(self):
+        return IterableQuery(chain.from_iterable(self.__iterable))
+
     def where(self, condition):
         return IterableQuery(i for i in self.__iterable if condition(i))
 

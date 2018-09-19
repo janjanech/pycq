@@ -56,6 +56,9 @@ class Query(ABC, Generic[T], Iterable[T]):
     def select_many(self, selector: Callable[[T], Iterable[TValue]]) -> "Query[TValue]": ...
 
     @abstractmethod
+    def chain(self: "Query[Iterable[TValue]]") -> "Query[TValue]": ...
+
+    @abstractmethod
     def where(self, condition: Callable[[T], bool]) -> "Query[T]": ...
 
     @abstractmethod
