@@ -6,19 +6,31 @@ except ImportError:
     class ABC(metaclass=ABCMeta): pass
 
 from abc import abstractmethod
-from typing import Generic, List, TypeVar, Iterable, overload, Callable, Dict, Set, Tuple, Type, TYPE_CHECKING
+from typing import Generic, List, TypeVar, Iterable, overload, Callable, Dict, Set, Tuple, Type
 
 T = TypeVar('T')
 TKey = TypeVar('TKey')
 TValue = TypeVar('TValue')
 
 
-class NumberedItem(Generic[T]):
+class NumberedItem(ABC, Generic[T]):
     @property
-    def no(self) -> int: return 0
+    @abstractmethod
+    def no(self) -> int: ...
 
     @property
-    def item(self) -> T: return None
+    @abstractmethod
+    def item(self) -> T: ...
+
+
+class GroupedItems(ABC, Generic[TKey, T]):
+    @property
+    @abstractmethod
+    def key(self) -> TKey: ...
+
+    @property
+    @abstractmethod
+    def items(self) -> "Query[T]": ...
 
 
 class Query(ABC, Generic[T], Iterable[T]):
@@ -165,6 +177,12 @@ class Query(ABC, Generic[T], Iterable[T]):
 
     @abstractmethod
     def append(self, value: T) -> "Query[T]": ...
+
+    @abstractmethod
+    def group_by(self, key_selector: Callable[[T], TKey]) -> "Query[GroupedItems[TKey, T]]": ...
+
+    @abstractmethod
+    def group_by_ordered(self, key_selector: Callable[[T], TKey]) -> "Query[GroupedItems[TKey, T]]": ...
 
     @abstractmethod
     def reverse(self) -> "Query[T]": ...

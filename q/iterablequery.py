@@ -1,6 +1,6 @@
 from collections import namedtuple
 from functools import reduce
-from itertools import chain, zip_longest
+from itertools import chain, zip_longest, starmap, groupby
 from typing import Generic, Iterable, TypeVar, Sized, Reversible
 
 from .query import Query
@@ -8,6 +8,7 @@ from .query import Query
 T = TypeVar('T')
 
 NumberedItem = namedtuple('NumberedItem', ['no', 'item'])
+GroupedItems = namedtuple('GroupedItems', ['key', 'items'])
 
 
 class IterableQuery(Generic[T], Query[T]):
@@ -18,7 +19,7 @@ class IterableQuery(Generic[T], Query[T]):
         return iter(self.__iterable)
 
     def with_number(self):
-        return IterableQuery(NumberedItem(no, item) for no, item in enumerate(self.__iterable))
+        return IterableQuery(starmap(NumberedItem, enumerate(self.__iterable)))
 
     def reduce(self, func_or_initializer, func_if_initializer_given=None):
         if func_if_initializer_given is not None:
@@ -39,6 +40,7 @@ class IterableQuery(Generic[T], Query[T]):
         return IterableQuery(type(i) for i in self.__iterable)
 
     def of_type(self, type):
+        # noinspection PyTypeHints
         return IterableQuery(i for i in self.__iterable if isinstance(i, type))
 
     def count(self):
@@ -217,6 +219,18 @@ class IterableQuery(Generic[T], Query[T]):
 
     def append(self, value):
         return IterableQuery(chain(self.__iterable, (value, )))
+
+    def group_by(self, key_selector):
+        result = {}
+        for item in self.__iterable:
+            result.setdefault(key_selector(item), []).append(item)
+
+        return IterableQuery(GroupedItems(key, IterableQuery(items)) for key, items in result.items())
+
+    def group_by_ordered(self, key_selector):
+        result = groupby(self.__iterable, key_selector)
+
+        return IterableQuery(GroupedItems(key, IterableQuery(items)) for key, items in result)
 
     def reverse(self):
         if isinstance(self.__iterable, Reversible):
