@@ -9,6 +9,7 @@ T = TypeVar('T')
 
 NumberedItem = namedtuple('NumberedItem', ['no', 'item'])
 GroupedItems = namedtuple('GroupedItems', ['key', 'items'])
+ZippedItems = namedtuple('ZippedItems', ['left', 'right'])
 
 
 class IterableQuery(Generic[T], Query[T]):
@@ -252,6 +253,28 @@ class IterableQuery(Generic[T], Query[T]):
             return IterableQuery(reversed(self.__iterable))
         else:
             return IterableQuery(reversed(list(self.__iterable)))
+
+    def zip(self, other_iterable):
+        return IterableQuery(starmap(ZippedItems, zip(self.__iterable, other_iterable)))
+
+    def zip_longest(self, other_iterable, *, fill=None, fill_left=None, fill_right=None):
+        if fill_left is None and fill_right is None:
+            return IterableQuery(starmap(ZippedItems, zip_longest(self.__iterable, other_iterable, fillvalue=fill)))
+        elif fill_left is fill_right:
+            return IterableQuery(starmap(ZippedItems, zip_longest(self.__iterable, other_iterable, fillvalue=fill_left)))
+        else:
+            return IterableQuery(self.__zip_longest(other_iterable, fill_left, fill_right))
+
+    def __zip_longest(self, other_iterable, fill_left, fill_right):
+        marker = object()
+
+        for left_item, right_item in zip_longest(self.__iterable, other_iterable, fillvalue=marker):
+            if left_item is marker:
+                left_item = fill_left
+            if right_item is marker:
+                right_item = fill_right
+
+            yield ZippedItems(left_item, right_item)
 
     def to_list(self):
         return list(self.__iterable)

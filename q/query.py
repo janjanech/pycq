@@ -3,7 +3,9 @@ try:
 except ImportError:
     from abc import ABCMeta
 
-    class ABC(metaclass=ABCMeta): pass
+
+    class ABC(metaclass=ABCMeta):
+        pass
 
 from abc import abstractmethod
 from typing import Generic, List, TypeVar, Iterable, overload, Callable, Dict, Set, Tuple, Type, AnyStr, FrozenSet
@@ -11,6 +13,8 @@ from typing import Generic, List, TypeVar, Iterable, overload, Callable, Dict, S
 T = TypeVar('T')
 TKey = TypeVar('TKey')
 TValue = TypeVar('TValue')
+TOther = TypeVar('TOther')
+TItem = TypeVar('TItem')
 
 
 class NumberedItem(ABC, Generic[T]):
@@ -31,6 +35,16 @@ class GroupedItems(ABC, Generic[TKey, T]):
     @property
     @abstractmethod
     def items(self) -> "Query[T]": ...
+
+
+class ZippedItems(ABC, Generic[T, TOther]):
+    @property
+    @abstractmethod
+    def left(self) -> T: ...
+
+    @property
+    @abstractmethod
+    def right(self) -> TOther: ...
 
 
 class Query(ABC, Generic[T], Iterable[T]):
@@ -56,7 +70,7 @@ class Query(ABC, Generic[T], Iterable[T]):
     def select_many(self, selector: Callable[[T], Iterable[TValue]]) -> "Query[TValue]": ...
 
     @abstractmethod
-    def chain(self: "Query[Iterable[TValue]]") -> "Query[TValue]": ...
+    def chain(self: "Query[Iterable[TItem]]") -> "Query[TItem]": ...
 
     @abstractmethod
     def where(self, condition: Callable[[T], bool]) -> "Query[T]": ...
@@ -201,6 +215,20 @@ class Query(ABC, Generic[T], Iterable[T]):
 
     @abstractmethod
     def reverse(self) -> "Query[T]": ...
+
+    @abstractmethod
+    def zip(self, other_iterable: Iterable[TOther]) -> "Query[ZippedItems[T, TOther]]": ...
+
+    @overload
+    def zip_longest(self, other_iterable: Iterable[TOther], *, fill_left: T = None, fill_right: TOther = None)\
+            -> "Query[ZippedItems[T, TOther]]": ...
+
+    @overload
+    def zip_longest(self, other_iterable: Iterable[T], *, fill: T = None)\
+            -> "Query[ZippedItems[T, T]]": ...
+
+    @abstractmethod
+    def zip_longest(self, other_iterable, *, fill=None, fill_left=None, fill_right=None): ...
 
     @abstractmethod
     def to_list(self) -> List[T]: ...
