@@ -47,6 +47,41 @@ class IterableQuery(Generic[T], Query[T]):
         # noinspection PyTypeHints
         return IterableQuery(i for i in self.__iterable if isinstance(i, type))
 
+    def distinct(self, key_selector=None):
+        if key_selector is None:
+            return IterableQuery(set(self.__iterable))
+        else:
+            return IterableQuery(self.__distinct(key_selector))
+
+    def __distinct(self, key_selector):
+        keys = set()
+        for i in self.__iterable:
+            key = key_selector(i)
+            if key not in keys:
+                yield i
+                keys.add(key)
+
+    def distinct_ordered(self, key_selector=None):
+        if key_selector is None:
+            return IterableQuery(self.__distinct_ordered())
+        else:
+            return IterableQuery(self.__distinct_ordered_with_key_selector(key_selector))
+
+    def __distinct_ordered(self):
+        last_item = object()
+        for i in self.__iterable:
+            if last_item != i:
+                last_item = i
+                yield i
+
+    def __distinct_ordered_with_key_selector(self, key_selector):
+        last_key = object()
+        for i in self.__iterable:
+            key = key_selector(i)
+            if last_key != key:
+                last_key = key
+                yield i
+
     def count(self):
         if isinstance(self.__iterable, Sized):
             return len(self.__iterable)
