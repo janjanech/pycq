@@ -259,6 +259,9 @@ class IterableQuery(Generic[T], Query[T]):
     def to_set(self):
         return set(self.__iterable)
 
+    def to_frozenset(self):
+        return frozenset(self.__iterable)
+
     def to_tuple(self):
         return tuple(self.__iterable)
 

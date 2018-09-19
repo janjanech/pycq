@@ -6,7 +6,7 @@ except ImportError:
     class ABC(metaclass=ABCMeta): pass
 
 from abc import abstractmethod
-from typing import Generic, List, TypeVar, Iterable, overload, Callable, Dict, Set, Tuple, Type, AnyStr
+from typing import Generic, List, TypeVar, Iterable, overload, Callable, Dict, Set, Tuple, Type, AnyStr, FrozenSet
 
 T = TypeVar('T')
 TKey = TypeVar('TKey')
@@ -207,6 +207,9 @@ class Query(ABC, Generic[T], Iterable[T]):
 
     @abstractmethod
     def to_set(self) -> Set[T]: ...
+
+    @abstractmethod
+    def to_frozenset(self) -> FrozenSet[T]: ...
 
     @abstractmethod
     def to_tuple(self) -> Tuple[T, ...]: ...
