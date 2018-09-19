@@ -1,6 +1,6 @@
 from collections import namedtuple
 from functools import reduce
-from itertools import chain, zip_longest, starmap, groupby
+from itertools import chain, zip_longest, starmap, groupby, islice, dropwhile, takewhile
 from typing import Generic, Iterable, TypeVar, Sized
 
 from .query import Query
@@ -153,6 +153,18 @@ class IterableQuery(Generic[T], Query[T]):
                 last_value = i
 
         return last_value
+
+    def skip(self, count):
+        return IterableQuery(islice(self.__iterable, count, None))
+
+    def skip_while(self, condition):
+        return IterableQuery(dropwhile(condition, self.__iterable))
+
+    def take(self, count):
+        return IterableQuery(islice(self.__iterable, count))
+
+    def take_while(self, condition):
+        return IterableQuery(takewhile(condition, self.__iterable))
 
     def any(self, condition=None):
         if condition is None:
