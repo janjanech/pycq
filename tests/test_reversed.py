@@ -5,7 +5,7 @@ from q import Q
 
 class Reduce(unittest.TestCase):
     def test_only_reverse(self):
-        data = (1, 2, 3)
+        data = [1, 2, 3]
         ret = Q(data).reverse().to_list()
 
         self.assertSequenceEqual((3, 2, 1), ret)

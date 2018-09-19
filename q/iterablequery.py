@@ -1,7 +1,7 @@
 from collections import namedtuple
 from functools import reduce
 from itertools import chain, zip_longest, starmap, groupby
-from typing import Generic, Iterable, TypeVar, Sized, Reversible
+from typing import Generic, Iterable, TypeVar, Sized
 
 from .query import Query
 
@@ -233,7 +233,7 @@ class IterableQuery(Generic[T], Query[T]):
         return IterableQuery(GroupedItems(key, IterableQuery(items)) for key, items in result)
 
     def reverse(self):
-        if isinstance(self.__iterable, Reversible):
+        if hasattr(self.__iterable, '__reversed__'):  # ABC Reversible is not available till python 3.6
             return IterableQuery(reversed(self.__iterable))
         else:
             return IterableQuery(reversed(list(self.__iterable)))
