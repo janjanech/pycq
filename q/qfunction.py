@@ -1,5 +1,5 @@
 from itertools import repeat, count
-from typing import Union, TypeVar, Iterable, Iterator, Optional, Any
+from typing import Union, TypeVar, Iterable, Iterator, Optional, Any, AnyStr
 
 from .iterablehelper import IterableHelper
 from .query import Query
@@ -38,7 +38,7 @@ class QFunction:
         else:
             return self(repeat(element, count))
 
-    def split(self, string: str, separator: Optional[str], count: int = None) -> Query[str]:
+    def split(self, string: AnyStr, separator: Optional[AnyStr], count: int = None) -> Query[AnyStr]:
         if count is None:
             return self(string.split(separator))
         else:
@@ -61,7 +61,7 @@ class Q(metaclass=QFunction):
     def repeat(element: T, count: Optional[int] = None) -> Query[T]: ...
     
     @staticmethod
-    def split(string: str, separator: Optional[str], count: int = None) -> Query[str]: ...
+    def split(string: AnyStr, separator: Optional[AnyStr], count: AnyStr = None) -> Query[AnyStr]: ...
 
 
 __ALL__ = ['Q']

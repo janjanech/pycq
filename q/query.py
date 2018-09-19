@@ -6,7 +6,7 @@ except ImportError:
     class ABC(metaclass=ABCMeta): pass
 
 from abc import abstractmethod
-from typing import Generic, List, TypeVar, Iterable, overload, Callable, Dict, Set, Tuple, Type
+from typing import Generic, List, TypeVar, Iterable, overload, Callable, Dict, Set, Tuple, Type, AnyStr
 
 T = TypeVar('T')
 TKey = TypeVar('TKey')
@@ -218,4 +218,4 @@ class Query(ABC, Generic[T], Iterable[T]):
     def to_dict(self, key_selector, value_selector=None): ...
 
     @abstractmethod
-    def join(self, separator: str) -> str: ...
+    def join(self: "Query[AnyStr]", separator: AnyStr) -> AnyStr: ...
