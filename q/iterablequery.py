@@ -82,6 +82,44 @@ class IterableQuery(Generic[T], Query[T]):
                 last_key = key
                 yield i
 
+    def union(self, iterable):
+        return IterableQuery(self.__union(iterable))
+
+    def __union(self, iterable):
+        union = set()
+
+        for i in self.__iterable:
+            if i not in union:
+                union.add(i)
+                yield i
+
+        for i in iterable:
+            if i not in union:
+                union.add(i)
+                yield i
+
+    def intersect(self, iterable):
+        return IterableQuery(self.__intersect(iterable))
+
+    def __intersect(self, iterable):
+        interesction = set(iterable)
+
+        for i in self.__iterable:
+            if i in interesction:
+                interesction.remove(i)
+                yield i
+
+    def except_(self, iterable):
+        return IterableQuery(self.__except(iterable))
+
+    def __except(self, iterable):
+        difference = set(iterable)
+
+        for i in self.__iterable:
+            if i not in difference:
+                difference.add(i)
+                yield i
+
     def count(self):
         if isinstance(self.__iterable, Sized):
             return len(self.__iterable)
