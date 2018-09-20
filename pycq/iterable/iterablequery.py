@@ -1,6 +1,6 @@
 from collections import namedtuple, deque
 from functools import reduce
-from itertools import chain, zip_longest, starmap, groupby, islice, dropwhile, takewhile
+from itertools import chain, zip_longest, starmap, groupby, islice, dropwhile, takewhile, tee
 from typing import Generic, Iterable, TypeVar, Sized
 
 from pycq.interfaces import SortingQuery
@@ -21,6 +21,10 @@ class IterableQuery(Generic[T], SortingQuery[T]):
 
     def __iter__(self):
         return iter(self.__iterable)
+
+    def tee(self):
+        self.__iterable, ret = tee(self.__iterable)
+        return IterableQuery(ret)
 
     def with_number(self):
         return IterableQuery(starmap(NumberedItem, enumerate(self.__iterable)))

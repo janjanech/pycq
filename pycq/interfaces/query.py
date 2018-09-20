@@ -81,6 +81,9 @@ class Query(ABC, Generic[T], Iterable[T]):
         return self
 
     @abstractmethod
+    def tee(self) -> "Query[T]": ...
+
+    @abstractmethod
     def with_number(self) -> "Query[NumberedItem[T]]": ...
 
     @overload

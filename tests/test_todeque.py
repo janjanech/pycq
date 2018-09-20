@@ -4,7 +4,7 @@ from collections import deque
 from pycq.q import Q
 
 
-class ToList(unittest.TestCase):
+class ToDeque(unittest.TestCase):
     def test_tuple(self):
         data = (1, 2, 3)
         ret = Q(data).to_deque()
