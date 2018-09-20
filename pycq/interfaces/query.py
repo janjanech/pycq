@@ -47,6 +47,34 @@ class ZippedItems(ABC, Generic[T, TOther]):
     def right(self) -> TOther: ...
 
 
+class JoinedItems(ABC, Generic[TKey, T, TOther]):
+    @property
+    @abstractmethod
+    def key(self) -> TKey: ...
+
+    @property
+    @abstractmethod
+    def left(self) -> T: ...
+
+    @property
+    @abstractmethod
+    def right(self) -> TOther: ...
+
+
+class GroupJoinedItems(ABC, Generic[TKey, T, TOther]):
+    @property
+    @abstractmethod
+    def key(self) -> TKey: ...
+
+    @property
+    @abstractmethod
+    def left_items(self) -> "Query[T]": ...
+
+    @property
+    @abstractmethod
+    def right_items(self) -> "Query[T]": ...
+
+
 class Query(ABC, Generic[T], Iterable[T]):
     def __query__(self) -> "Query[T]":
         return self
@@ -250,6 +278,14 @@ class Query(ABC, Generic[T], Iterable[T]):
 
     @abstractmethod
     def zip_longest(self, other_iterable, *, fill=None, fill_left=None, fill_right=None): ...
+
+    @abstractmethod
+    def inner_join(self, other_iterable: Iterable[TOther], left_key_selector: Callable[[T], TKey],
+             right_key_selector: Callable[[T], TKey]) -> "Query[JoinedItems[TKey, T, TOther]]": ...
+
+    @abstractmethod
+    def group_join(self, other_iterable: Iterable[TOther], left_key_selector: Callable[[T], TKey],
+             right_key_selector: Callable[[T], TKey]) -> "Query[GroupJoinedItems[TKey, T, TOther]]": ...
 
     @abstractmethod
     def to_list(self) -> List[T]: ...

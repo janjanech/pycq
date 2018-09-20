@@ -11,6 +11,8 @@ T = TypeVar('T')
 NumberedItem = namedtuple('NumberedItem', ['no', 'item'])
 GroupedItems = namedtuple('GroupedItems', ['key', 'items'])
 ZippedItems = namedtuple('ZippedItems', ['left', 'right'])
+JoinedItems = namedtuple('JoinedItems', ['key', 'left', 'right'])
+GroupJoinedItems = namedtuple('GroupJoinedItems', ['key', 'left_items', 'right_items'])
 
 
 class IterableQuery(Generic[T], SortingQuery[T]):
@@ -369,6 +371,41 @@ class IterableQuery(Generic[T], SortingQuery[T]):
                 right_item = fill_right
 
             yield ZippedItems(left_item, right_item)
+
+    def inner_join(self, other_iterable, left_key_selector, right_key_selector):
+        return IterableQuery(self.__inner_join(other_iterable, left_key_selector, right_key_selector))
+
+    def __inner_join(self, other_iterable, left_key_selector, right_key_selector):
+        index = {}
+        for item in other_iterable:
+            key = right_key_selector(item)
+            index.setdefault(key, []).append(item)
+
+        for item in self.__iterable:
+            key = left_key_selector(item)
+            for inner_item in index.get(key, ()):
+                yield JoinedItems(key, item, inner_item)
+
+    def group_join(self, other_iterable, left_key_selector, right_key_selector):
+        return IterableQuery(self.__grouped_join(other_iterable, left_key_selector, right_key_selector))
+
+    def __grouped_join(self, other_iterable, left_key_selector, right_key_selector):
+        left_index = {}
+        for item in self.__iterable:
+            key = left_key_selector(item)
+            left_index.setdefault(key, []).append(item)
+
+        right_index = {}
+        for item in other_iterable:
+            key = right_key_selector(item)
+            right_index.setdefault(key, []).append(item)
+
+        for key, left_items in left_index.items():
+            yield GroupJoinedItems(key, IterableQuery(left_items), IterableQuery(right_index.get(key, ())))
+
+        for key, right_items in right_index.items():
+            if key not in left_index:
+                yield GroupJoinedItems(key, IterableQuery(()), IterableQuery(right_items))
 
     def to_list(self):
         return list(self.__iterable)
