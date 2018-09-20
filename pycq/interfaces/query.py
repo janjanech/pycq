@@ -229,6 +229,12 @@ class Query(ABC, Generic[T], Iterable[T]):
     def group_by_ordered(self, key_selector: Callable[[T], TKey]) -> "Query[GroupedItems[TKey, T]]": ...
 
     @abstractmethod
+    def sort_by(self, key_selector: Callable[[T], TKey]) -> "SortingQuery[T]": ...
+
+    @abstractmethod
+    def sort_by_desc(self, key_selector: Callable[[T], TKey]) -> "SortingQuery[T]": ...
+
+    @abstractmethod
     def reverse(self) -> "Query[T]": ...
 
     @abstractmethod
@@ -268,3 +274,11 @@ class Query(ABC, Generic[T], Iterable[T]):
 
     @abstractmethod
     def join(self: "Query[AnyStr]", separator: AnyStr) -> AnyStr: ...
+
+
+class SortingQuery(Generic[T], Query[T]):
+    @abstractmethod
+    def then_by(self, key_selector: Callable[[T], TKey]) -> "SortingQuery[T]": ...
+
+    @abstractmethod
+    def then_by_desc(self, key_selector: Callable[[T], TKey]) -> "SortingQuery[T]": ...

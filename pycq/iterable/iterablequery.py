@@ -3,7 +3,8 @@ from functools import reduce
 from itertools import chain, zip_longest, starmap, groupby, islice, dropwhile, takewhile
 from typing import Generic, Iterable, TypeVar, Sized
 
-from pycq.interfaces import Query
+from pycq.interfaces import SortingQuery
+from .sortingiterable import SortingIterable
 
 T = TypeVar('T')
 
@@ -12,7 +13,7 @@ GroupedItems = namedtuple('GroupedItems', ['key', 'items'])
 ZippedItems = namedtuple('ZippedItems', ['left', 'right'])
 
 
-class IterableQuery(Generic[T], Query[T]):
+class IterableQuery(Generic[T], SortingQuery[T]):
     def __init__(self, iterable: Iterable[T]):
         self.__iterable = iterable
 
@@ -326,6 +327,26 @@ class IterableQuery(Generic[T], Query[T]):
             return IterableQuery(reversed(self.__iterable))
         else:
             return IterableQuery(reversed(list(self.__iterable)))
+
+    def sort_by(self, key_selector):
+        sorting_iterable = SortingIterable(self.__iterable, key_selector, False)
+        return IterableQuery(sorting_iterable)
+
+    def sort_by_desc(self, key_selector):
+        sorting_iterable = SortingIterable(self.__iterable, key_selector, True)
+        return IterableQuery(sorting_iterable)
+
+    def then_by(self, key_selector):
+        if not isinstance(self.__iterable, SortingIterable):
+            raise TypeError("then_by cannot be used without preceding sort_by")
+        sorting_iterable = self.__iterable.add_key(key_selector, False)
+        return IterableQuery(sorting_iterable)
+
+    def then_by_desc(self, key_selector):
+        if not isinstance(self.__iterable, SortingIterable):
+            raise TypeError("then_by cannot be used without preceding sort_by")
+        sorting_iterable = self.__iterable.add_key(key_selector, False)
+        return IterableQuery(sorting_iterable)
 
     def zip(self, other_iterable):
         return IterableQuery(starmap(ZippedItems, zip(self.__iterable, other_iterable)))

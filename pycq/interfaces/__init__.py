@@ -1,2 +1,2 @@
 from .queryable import Queryable
-from .query import Query
+from .query import Query, SortingQuery
