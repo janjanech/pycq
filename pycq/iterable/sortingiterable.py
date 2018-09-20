@@ -65,6 +65,11 @@ class SortingKey:
         else:
             self.__key_parts = ((key_selector, desc), )
 
+    def resolve(self):
+        if not any(x[1] for x in self.__key_parts):
+            return SortingKeyAllAsc(key_selector for key_selector, desc in self.__key_parts)
+        return self
+
     def __call__(self, item):
         return SortingComparer([(key_selector(item), desc) for key_selector, desc in self.__key_parts])
 
@@ -72,17 +77,25 @@ class SortingKey:
         return SortingKey(self.__key_parts + ((key_selector, desc), ))
 
 
+class SortingKeyAllAsc:
+    def __init__(self, key_selectors):
+        self.__key_selectors = tuple(key_selectors)
+
+    def __call__(self, item):
+        return tuple(key_selector(item) for key_selector in self.__key_selectors)
+
+
 class SortingIterable(Generic[T], Iterable[T]):
     def __init__(self, iterable: Iterable[T], key_selector, desc=False):
         self.__iterable = iterable
-        
+
         if isinstance(key_selector, SortingKey):
             self.__key = key_selector
         else:
             self.__key = SortingKey(key_selector, desc)
 
     def __iter__(self) -> Iterator[T]:
-        return iter(sorted(self.__iterable, key=self.__key))
+        return iter(sorted(self.__iterable, key=self.__key.resolve()))
 
     def add_key(self, key_selector, desc=False):
         return SortingIterable(self.__iterable, self.__key.add_key(key_selector, desc))
