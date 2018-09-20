@@ -1,7 +1,7 @@
 import unittest
 from typing import cast, Iterable
 
-from q import Q
+from pycq.q import Q
 
 
 class SelectMany(unittest.TestCase):

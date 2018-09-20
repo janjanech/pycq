@@ -1,7 +1,7 @@
 import unittest
 from typing import cast
 
-from q import Q
+from pycq.q import Q
 
 
 class MinMaxAvgSum(unittest.TestCase):

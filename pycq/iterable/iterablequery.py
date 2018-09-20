@@ -3,7 +3,7 @@ from functools import reduce
 from itertools import chain, zip_longest, starmap, groupby, islice, dropwhile, takewhile
 from typing import Generic, Iterable, TypeVar, Sized
 
-from .query import Query
+from pycq.interfaces import Query
 
 T = TypeVar('T')
 

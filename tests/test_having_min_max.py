@@ -1,7 +1,7 @@
 import unittest
 from collections import namedtuple
 
-from q import Q
+from pycq.q import Q
 
 
 TestObject = namedtuple('TestObject', ['a', 'b'])

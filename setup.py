@@ -1,13 +1,13 @@
 import setuptools
 
-import q
+import pycq
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name=q.name,
-    version=q.__version__,
+    name=pycq.name,
+    version=pycq.__version__,
     author="Ján Janech",
     author_email="janik@janik.ws",
     description="A simple software library helping with processing collections.",

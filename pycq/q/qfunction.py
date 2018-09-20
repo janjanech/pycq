@@ -1,10 +1,8 @@
 from itertools import repeat, count
 from typing import Union, TypeVar, Iterable, Iterator, Optional, Any, AnyStr
 
-from .iterablehelper import IterableHelper
-from .query import Query
-from .iterablequery import IterableQuery
-from .queryable import Queryable
+from pycq.iterable import IterableHelper, IterableQuery
+from pycq.interfaces import Query, Queryable
 
 T = TypeVar('T')
 

@@ -1,7 +1,7 @@
 import unittest
 from itertools import zip_longest
 
-from q import Q
+from pycq.q import Q
 
 
 class ForEach(unittest.TestCase):

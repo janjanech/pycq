@@ -1,6 +1,6 @@
 import unittest
 
-from q import Q
+from pycq.q import Q
 
 
 class ToSet(unittest.TestCase):

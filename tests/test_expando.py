@@ -1,6 +1,6 @@
 import unittest
 
-from q import Expando
+from pycq.expando import Expando
 
 
 class ExpandoObject(unittest.TestCase):
