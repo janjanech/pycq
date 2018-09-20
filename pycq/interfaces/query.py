@@ -8,7 +8,8 @@ except ImportError:
         pass
 
 from abc import abstractmethod
-from typing import Generic, List, TypeVar, Iterable, overload, Callable, Dict, Set, Tuple, Type, AnyStr, FrozenSet
+from typing import Generic, List, TypeVar, Iterable, overload, Callable, Dict, Set, Tuple, Type, AnyStr, FrozenSet, \
+    Deque
 
 T = TypeVar('T')
 TKey = TypeVar('TKey')
@@ -307,6 +308,9 @@ class Query(ABC, Generic[T], Iterable[T]):
 
     @abstractmethod
     def to_dict(self, key_selector, value_selector=None): ...
+
+    @abstractmethod
+    def to_deque(self, max_length: int = None) -> Deque[T]: ...
 
     @abstractmethod
     def join(self: "Query[AnyStr]", separator: AnyStr) -> AnyStr: ...

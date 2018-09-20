@@ -1,4 +1,4 @@
-from collections import namedtuple
+from collections import namedtuple, deque
 from functools import reduce
 from itertools import chain, zip_longest, starmap, groupby, islice, dropwhile, takewhile
 from typing import Generic, Iterable, TypeVar, Sized
@@ -424,6 +424,9 @@ class IterableQuery(Generic[T], SortingQuery[T]):
             return {key_selector(i): i for i in self.__iterable}
         else:
             return {key_selector(i): value_selector(i) for i in self.__iterable}
+
+    def to_deque(self, max_length=None):
+        return deque(self.__iterable, max_length)
 
     def join(self, separator):
         return separator.join(self.__iterable)
