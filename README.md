@@ -53,8 +53,7 @@ var categories =
     select new { Category = g.Key, MostExpensiveProducts = g.Where(p => p.UnitPrice == maxPrice) }; 
 ```
 
-In pycq, you can write the query in a similar manner (Obj and group_by will
-by added in a near future):
+In pycq, you can write the query in a similar manner:
 ```python
 from q import Q, Expando
 products = self.GetProducts()
