@@ -236,6 +236,34 @@ class IterableQuery(SortingQuery):
 
         return last_value
 
+    def single(self, condition=None):
+        single_value = marker = object()
+
+        for i in self.__iterable:
+            if condition is None or condition(i):
+                if single_value is not marker:
+                    raise ValueError("sequence contains more than one value")
+                single_value = i
+
+        if single_value is marker:
+            raise ValueError("sequence was empty")
+
+        return single_value
+
+    def single_or_default(self, default, condition=None):
+        single_value = marker = object()
+
+        for i in self.__iterable:
+            if condition is None or condition(i):
+                if single_value is not marker:
+                    raise ValueError("sequence contains more than one value")
+                single_value = i
+
+        if single_value is marker:
+            return default
+
+        return single_value
+
     def skip(self, count):
         return IterableQuery(islice(self.__iterable, count, None))
 

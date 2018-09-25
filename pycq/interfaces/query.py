@@ -88,6 +88,12 @@ class Query(ABC):
     def last_or_default(self, default, condition=None): pass
 
     @abstractmethod
+    def single(self, condition=None): pass
+
+    @abstractmethod
+    def single_or_default(self, default, condition=None): pass
+
+    @abstractmethod
     def skip(self, count): pass
 
     @abstractmethod
