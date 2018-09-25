@@ -244,8 +244,21 @@ class IterableQuery(Generic[T], SortingQuery[T]):
     def skip_while(self, condition):
         return IterableQuery(dropwhile(condition, self.__iterable))
 
+    def skip_last(self, count):
+        return IterableQuery(self.__skip_last(count))
+
+    def __skip_last(self, count):
+        ret = deque()
+        for i in self.__iterable:
+            ret.append(i)
+            if len(ret) > count:
+                yield ret.popleft()
+
     def take(self, count):
         return IterableQuery(islice(self.__iterable, count))
+
+    def take_last(self, count):
+        return IterableQuery(deque(self.__iterable, count))
 
     def take_while(self, condition):
         return IterableQuery(takewhile(condition, self.__iterable))
