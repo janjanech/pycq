@@ -1,5 +1,4 @@
 import unittest
-from typing import cast
 
 from pycq.q import Q
 
@@ -13,7 +12,7 @@ class MinMaxAvgSum(unittest.TestCase):
 
     def test_min_with_selector(self):
         data = [1, 2, 3]
-        ret = Q(data).min(lambda x: -cast(int, x))
+        ret = Q(data).min(lambda x: -x)
 
         self.assertEqual(-3, ret)
 
@@ -25,7 +24,7 @@ class MinMaxAvgSum(unittest.TestCase):
 
     def test_max_with_selector(self):
         data = [1, 2, 3]
-        ret = Q(data).max(lambda x: -cast(int, x))
+        ret = Q(data).max(lambda x: -x)
 
         self.assertEqual(-1, ret)
 
@@ -37,7 +36,7 @@ class MinMaxAvgSum(unittest.TestCase):
 
     def test_sum_with_selector(self):
         data = [1, 2, 3]
-        ret = Q(data).sum(lambda x: -cast(int, x))
+        ret = Q(data).sum(lambda x: -x)
 
         self.assertEqual(-6, ret)
 
@@ -49,6 +48,6 @@ class MinMaxAvgSum(unittest.TestCase):
 
     def test_average_with_selector(self):
         data = [1, 2, 3]
-        ret = Q(data).average(lambda x: -cast(int, x))
+        ret = Q(data).average(lambda x: -x)
 
         self.assertEqual(-2, ret)

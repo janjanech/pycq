@@ -3,16 +3,11 @@ try:
 except ImportError:
     from abc import ABCMeta
 
-    class ABC(metaclass=ABCMeta): pass
+    ABC = ABCMeta('ABC', (object, ), {})
 
 from abc import abstractmethod
-from typing import TypeVar, Generic
-
-from .query import Query
-
-T = TypeVar('T')
 
 
-class Queryable(ABC, Generic[T]):
+class Queryable(ABC):
     @abstractmethod
-    def __query__(self) -> Query[T]: ...
+    def __query__(self): pass

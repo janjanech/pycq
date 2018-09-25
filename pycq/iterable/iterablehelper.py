@@ -1,11 +1,6 @@
-from typing import Generic, TypeVar, Iterable, Iterator
-
-T = TypeVar('T')
-
-
-class IterableHelper(Generic[T], Iterable[T]):
-    def __init__(self, iterator: Iterator[T]):
+class IterableHelper:
+    def __init__(self, iterator):
         self.__iterator = iterator
 
-    def __iter__(self) -> Iterator[T]:
+    def __iter__(self):
         return self.__iterator

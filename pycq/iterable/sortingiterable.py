@@ -1,8 +1,3 @@
-from typing import Iterable, Generic, TypeVar, Iterator
-
-T = TypeVar('T')
-
-
 class SortingComparer:
     def __init__(self, values):
         self.__values = values
@@ -85,8 +80,8 @@ class SortingKeyAllAsc:
         return tuple(key_selector(item) for key_selector in self.__key_selectors)
 
 
-class SortingIterable(Generic[T], Iterable[T]):
-    def __init__(self, iterable: Iterable[T], key_selector, desc=False):
+class SortingIterable:
+    def __init__(self, iterable, key_selector, desc=False):
         self.__iterable = iterable
 
         if isinstance(key_selector, SortingKey):
@@ -94,7 +89,7 @@ class SortingIterable(Generic[T], Iterable[T]):
         else:
             self.__key = SortingKey(key_selector, desc)
 
-    def __iter__(self) -> Iterator[T]:
+    def __iter__(self):
         return iter(sorted(self.__iterable, key=self.__key.resolve()))
 
     def add_key(self, key_selector, desc=False):

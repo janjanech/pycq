@@ -1,7 +1,3 @@
-from typing import no_type_check
-
-
-@no_type_check
 class Expando:
     __ro = False
 

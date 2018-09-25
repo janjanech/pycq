@@ -3,337 +3,199 @@ try:
 except ImportError:
     from abc import ABCMeta
 
-
-    class ABC(metaclass=ABCMeta):
-        pass
+    ABC = ABCMeta('ABC', (object, ), {})
 
 from abc import abstractmethod
-from typing import Generic, List, TypeVar, Iterable, overload, Callable, Dict, Set, Tuple, Type, AnyStr, FrozenSet, \
-    Deque
-
-T = TypeVar('T')
-TKey = TypeVar('TKey')
-TValue = TypeVar('TValue')
-TOther = TypeVar('TOther')
-TItem = TypeVar('TItem')
 
 
-class NumberedItem(ABC, Generic[T]):
-    @property
-    @abstractmethod
-    def no(self) -> int: ...
-
-    @property
-    @abstractmethod
-    def item(self) -> T: ...
-
-
-class GroupedItems(ABC, Generic[TKey, T]):
-    @property
-    @abstractmethod
-    def key(self) -> TKey: ...
-
-    @property
-    @abstractmethod
-    def items(self) -> "Query[T]": ...
-
-
-class ZippedItems(ABC, Generic[T, TOther]):
-    @property
-    @abstractmethod
-    def left(self) -> T: ...
-
-    @property
-    @abstractmethod
-    def right(self) -> TOther: ...
-
-
-class JoinedItems(ABC, Generic[TKey, T, TOther]):
-    @property
-    @abstractmethod
-    def key(self) -> TKey: ...
-
-    @property
-    @abstractmethod
-    def left(self) -> T: ...
-
-    @property
-    @abstractmethod
-    def right(self) -> TOther: ...
-
-
-class GroupJoinedItems(ABC, Generic[TKey, T, TOther]):
-    @property
-    @abstractmethod
-    def key(self) -> TKey: ...
-
-    @property
-    @abstractmethod
-    def left_items(self) -> "Query[T]": ...
-
-    @property
-    @abstractmethod
-    def right_items(self) -> "Query[T]": ...
-
-
-class Query(ABC, Generic[T], Iterable[T]):
-    def __query__(self) -> "Query[T]":
+class Query(ABC):
+    def __query__(self):
         return self
 
     @abstractmethod
-    def tee(self) -> "Query[T]": ...
+    def tee(self): pass
 
     @abstractmethod
-    def with_number(self) -> "Query[NumberedItem[T]]": ...
-
-    @overload
-    def reduce(self, func: Callable[[T, T], T]) -> T: ...
-
-    @overload
-    def reduce(self, initializer: TValue, func: Callable[[TValue, T], TValue]) -> TValue: ...
+    def with_number(self): pass
 
     @abstractmethod
-    def reduce(self, func_or_initializer, func_if_initializer_given=None): ...
+    def reduce(self, func_or_initializer, func_if_initializer_given=None): pass
 
     @abstractmethod
-    def select(self, selector: Callable[[T], TValue]) -> "Query[TValue]": ...
+    def select(self, selector): pass
 
     @abstractmethod
-    def select_many(self, selector: Callable[[T], Iterable[TValue]]) -> "Query[TValue]": ...
+    def select_many(self, selector): pass
 
     @abstractmethod
-    def chain(self: "Query[Iterable[TItem]]") -> "Query[TItem]": ...
+    def chain(self): pass
 
     @abstractmethod
-    def where(self, condition: Callable[[T], bool]) -> "Query[T]": ...
+    def where(self, condition): pass
 
     @abstractmethod
-    def cast(self, type: Type[TValue]) -> "Query[TValue]": ...
+    def cast(self, type): pass
 
     @abstractmethod
-    def of_type(self, type: Type[TValue]) -> "Query[TValue]": ...
+    def of_type(self, type): pass
 
     @abstractmethod
-    def distinct(self, key_selector: Callable[[T], bool] = None) -> "Query[T]": ...
+    def distinct(self, key_selector=None): pass
 
     @abstractmethod
-    def union(self, iterable: Iterable[T]) -> "Query[T]": ...
+    def union(self, iterable): pass
 
     @abstractmethod
-    def intersect(self, iterable: Iterable[T]) -> "Query[T]": ...
+    def intersect(self, iterable): pass
 
     @abstractmethod
-    def except_(self, iterable: Iterable[T]) -> "Query[T]": ...
+    def except_(self, iterable): pass
 
     @abstractmethod
-    def distinct_ordered(self, key_selector: Callable[[T], bool] = None) -> "Query[T]": ...
+    def distinct_ordered(self, key_selector=None): pass
 
     @abstractmethod
-    def count(self) -> int: ...
-
-    @overload
-    def sum(self) -> T: ...
-
-    @overload
-    def sum(self, selector: Callable[[T], TValue]) -> TValue: ...
+    def count(self): pass
 
     @abstractmethod
-    def sum(self, selector=None): ...
-
-    @overload
-    def average(self) -> TValue: ...
-
-    @overload
-    def average(self, selector: Callable[[T], TValue]) -> TValue: ...
+    def sum(self, selector=None): pass
 
     @abstractmethod
-    def average(self, selector=None): ...
-
-    @overload
-    def min(self) -> T: ...
-
-    @overload
-    def min(self, selector: Callable[[T], TValue]) -> TValue: ...
+    def average(self, selector=None): pass
 
     @abstractmethod
-    def min(self, selector=None): ...
+    def min(self, selector=None): pass
 
     @abstractmethod
-    def having_min(self, selector: Callable[[T], TValue]) -> "Query[T]": ...
-
-    @overload
-    def max(self) -> T: ...
-
-    @overload
-    def max(self, selector: Callable[[T], TValue]) -> TValue: ...
+    def having_min(self, selector): pass
 
     @abstractmethod
-    def max(self, selector=None): ...
+    def max(self, selector=None): pass
 
     @abstractmethod
-    def having_max(self, selector: Callable[[T], TValue]) -> "Query[T]": ...
-
-    @overload
-    def first(self) -> T: ...
-
-    @overload
-    def first(self, condition: Callable[[T], bool]) -> T: ...
+    def having_max(self, selector): pass
 
     @abstractmethod
-    def first(self, condition=None): ...
-
-    @overload
-    def first_or_default(self, default: T) -> T: ...
-
-    @overload
-    def first_or_default(self, default: T, condition: Callable[[T], bool]) -> T: ...
+    def first(self, condition=None): pass
 
     @abstractmethod
-    def first_or_default(self, default, condition=None): ...
-
-    @overload
-    def last(self) -> T: ...
-
-    @overload
-    def last(self, condition: Callable[[T], bool]) -> T: ...
+    def first_or_default(self, default, condition=None): pass
 
     @abstractmethod
-    def last(self, condition=None): ...
-
-    @overload
-    def last_or_default(self, default: T) -> T: ...
-
-    @overload
-    def last_or_default(self, default: T, condition: Callable[[T], bool]) -> T: ...
+    def last(self, condition=None): pass
 
     @abstractmethod
-    def last_or_default(self, default, condition=None): ...
+    def last_or_default(self, default, condition=None): pass
 
     @abstractmethod
-    def skip(self, count: int) -> "Query[T]": ...
+    def skip(self, count): pass
 
     @abstractmethod
-    def skip_while(self, condition: Callable[[T], bool]) -> "Query[T]": ...
+    def skip_while(self, condition): pass
 
     @abstractmethod
-    def skip_last(self, count: int) -> "Query[T]": ...
+    def skip_last(self, count): pass
 
     @abstractmethod
-    def skip_last_having(self, condition: Callable[[T], bool]) -> "Query[T]": ...
+    def skip_last_having(self, condition): pass
 
     @abstractmethod
-    def take(self, count: int) -> "Query[T]": ...
+    def take(self, count): pass
 
     @abstractmethod
-    def take_while(self, condition: Callable[[T], bool]) -> "Query[T]": ...
+    def take_while(self, condition): pass
 
     @abstractmethod
-    def take_last(self, count: int) -> "Query[T]": ...
+    def take_last(self, count): pass
 
     @abstractmethod
-    def take_last_having(self, condition: Callable[[T], bool]) -> "Query[T]": ...
+    def take_last_having(self, condition): pass
 
     @abstractmethod
-    def any(self, condition: Callable[[T], bool] = None) -> bool: ...
+    def any(self, condition=None): pass
 
     @abstractmethod
-    def all(self, condition: Callable[[T], bool]) -> bool: ...
+    def all(self, condition): pass
 
     @abstractmethod
-    def contains(self, value: T) -> bool: ...
+    def contains(self, value): pass
 
     @abstractmethod
-    def contains_all(self, iterable: Iterable[T]) -> bool: ...
+    def contains_all(self, iterable): pass
 
     @abstractmethod
-    def contains_any(self, iterable: Iterable[T]) -> bool: ...
+    def contains_any(self, iterable): pass
 
     @abstractmethod
-    def sequence_equal(self, iterable: Iterable[T]) -> bool: ...
+    def sequence_equal(self, iterable): pass
 
     @abstractmethod
-    def default_if_empty(self, default: T) -> "Query[T]": ...
+    def default_if_empty(self, default): pass
 
     @abstractmethod
-    def prepend_all(self, iterable: Iterable[T]) -> "Query[T]": ...
+    def prepend_all(self, iterable): pass
 
     @abstractmethod
-    def prepend(self, value: T) -> "Query[T]": ...
+    def prepend(self, value): pass
 
     @abstractmethod
-    def append_all(self, iterable: Iterable[T]) -> "Query[T]": ...
+    def append_all(self, iterable): pass
 
     @abstractmethod
-    def append(self, value: T) -> "Query[T]": ...
+    def append(self, value): pass
 
     @abstractmethod
-    def group_by(self, key_selector: Callable[[T], TKey]) -> "Query[GroupedItems[TKey, T]]": ...
+    def group_by(self, key_selector): pass
 
     @abstractmethod
-    def group_by_ordered(self, key_selector: Callable[[T], TKey]) -> "Query[GroupedItems[TKey, T]]": ...
+    def group_by_ordered(self, key_selector): pass
 
     @abstractmethod
-    def sort_by(self, key_selector: Callable[[T], TKey]) -> "SortingQuery[T]": ...
+    def sort_by(self, key_selector): pass
 
     @abstractmethod
-    def sort_by_desc(self, key_selector: Callable[[T], TKey]) -> "SortingQuery[T]": ...
+    def sort_by_desc(self, key_selector): pass
 
     @abstractmethod
-    def reverse(self) -> "Query[T]": ...
+    def reverse(self): pass
 
     @abstractmethod
-    def zip(self, other_iterable: Iterable[TOther]) -> "Query[ZippedItems[T, TOther]]": ...
-
-    @overload
-    def zip_longest(self, other_iterable: Iterable[TOther], *, fill_left: T = None, fill_right: TOther = None)\
-            -> "Query[ZippedItems[T, TOther]]": ...
-
-    @overload
-    def zip_longest(self, other_iterable: Iterable[T], *, fill: T = None)\
-            -> "Query[ZippedItems[T, T]]": ...
+    def zip(self, other_iterable): pass
 
     @abstractmethod
-    def zip_longest(self, other_iterable, *, fill=None, fill_left=None, fill_right=None): ...
+    def zip_longest(self, other_iterable, *, fill=None, fill_left=None, fill_right=None): pass
 
     @abstractmethod
-    def inner_join(self, other_iterable: Iterable[TOther], left_key_selector: Callable[[T], TKey],
-             right_key_selector: Callable[[T], TKey]) -> "Query[JoinedItems[TKey, T, TOther]]": ...
+    def inner_join(self, other_iterable, left_key_selector, right_key_selector): pass
 
     @abstractmethod
-    def group_join(self, other_iterable: Iterable[TOther], left_key_selector: Callable[[T], TKey],
-             right_key_selector: Callable[[T], TKey]) -> "Query[GroupJoinedItems[TKey, T, TOther]]": ...
+    def group_join(self, other_iterable, left_key_selector, right_key_selector): pass
 
     @abstractmethod
-    def to_list(self) -> List[T]: ...
+    def to_list(self): pass
 
     @abstractmethod
-    def to_set(self) -> Set[T]: ...
+    def to_set(self): pass
 
     @abstractmethod
-    def to_frozenset(self) -> FrozenSet[T]: ...
+    def to_frozenset(self): pass
 
     @abstractmethod
-    def to_tuple(self) -> Tuple[T, ...]: ...
-
-    @overload
-    def to_dict(self, key_selector: Callable[[T], TKey]) -> Dict[TKey, T]: ...
-
-    @overload
-    def to_dict(self, key_selector: Callable[[T], TKey], value_selector: Callable[[T], TValue]) -> Dict[TKey, TValue]: ...
+    def to_tuple(self): pass
 
     @abstractmethod
-    def to_dict(self, key_selector, value_selector=None): ...
+    def to_dict(self, key_selector, value_selector=None): pass
 
     @abstractmethod
-    def to_deque(self, max_length: int = None) -> Deque[T]: ...
+    def to_deque(self, max_length=None): pass
 
     @abstractmethod
-    def join(self: "Query[AnyStr]", separator: AnyStr) -> AnyStr: ...
+    def join(self, separator): pass
 
 
-class SortingQuery(Generic[T], Query[T]):
+class SortingQuery(Query):
     @abstractmethod
-    def then_by(self, key_selector: Callable[[T], TKey]) -> "SortingQuery[T]": ...
+    def then_by(self, key_selector): pass
 
     @abstractmethod
-    def then_by_desc(self, key_selector: Callable[[T], TKey]) -> "SortingQuery[T]": ...
+    def then_by_desc(self, key_selector): pass

@@ -21,7 +21,4 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     test_suite="tests",
-    install_requires=[
-        'typing;python_version<"3.5"',
-    ]
 )

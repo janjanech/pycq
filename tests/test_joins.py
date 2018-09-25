@@ -1,6 +1,5 @@
 import unittest
 from collections import namedtuple
-from typing import cast
 
 from pycq.q import Q
 
@@ -12,7 +11,7 @@ class InnerGroupedJoin(unittest.TestCase):
     def test_inner_join(self):
         data = ['foo', 'bar', 'over', 'rack', 'kick']
         ret = Q(data)\
-            .inner_join(data, lambda x: cast(str, x)[-1], lambda x: cast(str, x)[0])\
+            .inner_join(data, lambda x: x[-1], lambda x: x[0])\
             .select(lambda x: (x.left, x.right))\
             .to_set()
 
@@ -24,7 +23,7 @@ class InnerGroupedJoin(unittest.TestCase):
     def test_group_join(self):
         data = ['foo', 'bar', 'over', 'rack', 'kick']
         ret = Q(data)\
-            .group_join(data, lambda x: cast(str, x)[-1], lambda x: cast(str, x)[0])\
+            .group_join(data, lambda x: x[-1], lambda x: x[0])\
             .select(lambda x: (x.left_items.to_frozenset(), x.right_items.to_frozenset()))\
             .to_set()
 

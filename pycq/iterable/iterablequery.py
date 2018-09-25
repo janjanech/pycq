@@ -1,12 +1,10 @@
 from collections import namedtuple, deque
+from collections import Sized
 from functools import reduce
 from itertools import chain, zip_longest, starmap, groupby, islice, dropwhile, takewhile, tee
-from typing import Generic, Iterable, TypeVar, Sized
 
 from pycq.interfaces import SortingQuery
 from .sortingiterable import SortingIterable
-
-T = TypeVar('T')
 
 NumberedItem = namedtuple('NumberedItem', ['no', 'item'])
 GroupedItems = namedtuple('GroupedItems', ['key', 'items'])
@@ -15,8 +13,8 @@ JoinedItems = namedtuple('JoinedItems', ['key', 'left', 'right'])
 GroupJoinedItems = namedtuple('GroupJoinedItems', ['key', 'left_items', 'right_items'])
 
 
-class IterableQuery(Generic[T], SortingQuery[T]):
-    def __init__(self, iterable: Iterable[T]):
+class IterableQuery(SortingQuery):
+    def __init__(self, iterable):
         self.__iterable = iterable
 
     def __iter__(self):
@@ -397,7 +395,7 @@ class IterableQuery(Generic[T], SortingQuery[T]):
     def zip(self, other_iterable):
         return IterableQuery(starmap(ZippedItems, zip(self.__iterable, other_iterable)))
 
-    def zip_longest(self, other_iterable, *, fill=None, fill_left=None, fill_right=None):
+    def zip_longest(self, other_iterable, fill=None, fill_left=None, fill_right=None):
         if fill_left is None and fill_right is None:
             return IterableQuery(starmap(ZippedItems, zip_longest(self.__iterable, other_iterable, fillvalue=fill)))
         elif fill_left is fill_right:

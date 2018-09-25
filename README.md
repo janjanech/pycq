@@ -55,7 +55,9 @@ var categories =
 
 In pycq, you can write the query in a similar manner:
 ```python
-from q import Q, Expando
+from pycq.q import Q
+from pycq.expando import Expando
+
 products = self.GetProducts()
 
 categories = Q(products)\
