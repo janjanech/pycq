@@ -254,6 +254,19 @@ class IterableQuery(Generic[T], SortingQuery[T]):
             if len(ret) > count:
                 yield ret.popleft()
 
+    def skip_last_having(self, condition):
+        return IterableQuery(self.__skip_last_having(condition))
+
+    def __skip_last_having(self, condition):
+        ret = deque()
+        for i in self.__iterable:
+            if condition(i):
+                ret.append(i)
+            else:
+                while ret:
+                    yield ret.popleft()
+                yield i
+
     def take(self, count):
         return IterableQuery(islice(self.__iterable, count))
 
@@ -262,6 +275,20 @@ class IterableQuery(Generic[T], SortingQuery[T]):
 
     def take_while(self, condition):
         return IterableQuery(takewhile(condition, self.__iterable))
+
+    def take_last_having(self, condition):
+        return IterableQuery(self.__take_last_having(condition))
+
+    def __take_last_having(self, condition):
+        ret = deque()
+        for i in self.__iterable:
+            if condition(i):
+                ret.append(i)
+            else:
+                ret.clear()
+
+        while ret:
+            yield ret.popleft()
 
     def any(self, condition=None):
         if condition is None:

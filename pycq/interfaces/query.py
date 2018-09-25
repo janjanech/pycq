@@ -219,6 +219,9 @@ class Query(ABC, Generic[T], Iterable[T]):
     def skip_last(self, count: int) -> "Query[T]": ...
 
     @abstractmethod
+    def skip_last_having(self, condition: Callable[[T], bool]) -> "Query[T]": ...
+
+    @abstractmethod
     def take(self, count: int) -> "Query[T]": ...
 
     @abstractmethod
@@ -226,6 +229,9 @@ class Query(ABC, Generic[T], Iterable[T]):
 
     @abstractmethod
     def take_last(self, count: int) -> "Query[T]": ...
+
+    @abstractmethod
+    def take_last_having(self, condition: Callable[[T], bool]) -> "Query[T]": ...
 
     @abstractmethod
     def any(self, condition: Callable[[T], bool] = None) -> bool: ...
