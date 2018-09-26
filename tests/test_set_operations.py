@@ -3,7 +3,7 @@ import unittest
 from pycq.q import Q
 
 
-class Skip(unittest.TestCase):
+class SetOperations(unittest.TestCase):
     def test_union(self):
         data1 = [1, 2, 3, 4]
         data2 = [3, 4, 5, 6, 7]

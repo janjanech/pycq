@@ -3,7 +3,7 @@ import unittest
 from pycq.q import Q
 
 
-class AnyAll(unittest.TestCase):
+class GroupBy(unittest.TestCase):
     def test_unordered(self):
         data = ("one", "two", "three", "opq")
         ret = Q(data)\

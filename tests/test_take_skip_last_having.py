@@ -3,7 +3,7 @@ import unittest
 from pycq.q import Q
 
 
-class TakeSkipLast(unittest.TestCase):
+class TakeSkipLastHaving(unittest.TestCase):
     def test_take_last_having(self):
         ret = Q.range(1, 9).take_last_having(lambda x: x % 2).to_list()
 

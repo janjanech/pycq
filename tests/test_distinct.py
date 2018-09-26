@@ -3,7 +3,7 @@ import unittest
 from pycq.q import Q
 
 
-class Default(unittest.TestCase):
+class Distinct(unittest.TestCase):
     def test_distinct(self):
         data = (1, 1, 2, 5, 1)
         ret = Q(data).distinct().to_set()
