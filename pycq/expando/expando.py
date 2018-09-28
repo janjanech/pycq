@@ -1,14 +1,12 @@
-class Expando:
-    __ro = False
+try:
+    from types import SimpleNamespace as Namespace
+except ImportError:
+    from .namespace import FallbackNamespace as Namespace
 
-    def __init__(self, **attrib):
-        self.__dict__ = attrib
-        self.__ro = True
 
+class Expando(Namespace):
     def __setattr__(self, key, value):
-        if self.__ro:
-            raise AttributeError("attribute '{0}' of 'Obj' objects is not writable")
-        super().__setattr__(key, value)
+        raise AttributeError("attribute '{0}' of 'Expando' objects is not writable".format(key))
 
     def __str__(self):
         return "Expando({0})".format(
