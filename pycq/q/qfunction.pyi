@@ -1,4 +1,4 @@
-from typing import Union, TypeVar, Iterable, Iterator, Optional, Any, AnyStr
+from typing import Union, TypeVar, Iterable, Iterator, Optional, Any, AnyStr, Callable
 
 from pycq.interfaces import Query, Queryable
 
@@ -21,3 +21,6 @@ class Q:
     
     @staticmethod
     def split(string: AnyStr, separator: Optional[AnyStr], count: AnyStr = None) -> Query[AnyStr]: ...
+    
+    @staticmethod
+    def iterate(seed: T, advance_function: Callable[[T], T]) -> Query[T]: ...

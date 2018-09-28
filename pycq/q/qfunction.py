@@ -40,6 +40,15 @@ class QFunction:
         else:
             return self(string.split(separator, count))
 
+    def iterate(self, seed, advance_function):
+        return self(self.__iterate(seed, advance_function))
+
+    def __iterate(self, seed, advance_function):
+        value = seed
+        while True:
+            yield value
+            value = advance_function(value)
+
 
 Q = QFunction()
 
