@@ -9,7 +9,7 @@ class ToList(unittest.TestCase):
         ret = Q(data).to_list()
 
         self.assertIsInstance(ret, list)
-        self.assertSequenceEqual(ret, data)
+        self.assertSequenceEqual(data, ret)
 
     def test_generator(self):
         data = (i for i in range(10))
@@ -17,4 +17,4 @@ class ToList(unittest.TestCase):
         ret = Q(data).to_list()
 
         self.assertIsInstance(ret, list)
-        self.assertSequenceEqual(ret, list(range(10)))
+        self.assertSequenceEqual(list(range(10)), ret)

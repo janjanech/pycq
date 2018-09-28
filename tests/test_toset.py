@@ -9,11 +9,11 @@ class ToSet(unittest.TestCase):
         ret = Q(data).to_set()
 
         self.assertIsInstance(ret, set)
-        self.assertSetEqual(ret, set(data))
+        self.assertSetEqual(set(data), ret)
 
     def test_frozen(self):
         data = [1, 2, 3]
         ret = Q(data).to_frozenset()
 
         self.assertIsInstance(ret, frozenset)
-        self.assertSetEqual(ret, set(data))
+        self.assertSetEqual(set(data), ret)

@@ -9,4 +9,4 @@ class ToTuple(unittest.TestCase):
         ret = Q(data).to_tuple()
 
         self.assertIsInstance(ret, tuple)
-        self.assertSequenceEqual(ret, data)
+        self.assertSequenceEqual(data, ret)

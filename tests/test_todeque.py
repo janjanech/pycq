@@ -10,7 +10,7 @@ class ToDeque(unittest.TestCase):
         ret = Q(data).to_deque()
 
         self.assertIsInstance(ret, deque)
-        self.assertSequenceEqual(ret, data)
+        self.assertSequenceEqual(data, ret)
 
     def test_generator(self):
         data = (i for i in range(10))
@@ -18,7 +18,7 @@ class ToDeque(unittest.TestCase):
         ret = Q(data).to_deque()
 
         self.assertIsInstance(ret, deque)
-        self.assertSequenceEqual(ret, list(range(10)))
+        self.assertSequenceEqual(list(range(10)), ret)
 
     def test_max_length(self):
         data = (i for i in range(100))
@@ -26,4 +26,4 @@ class ToDeque(unittest.TestCase):
         ret = Q(data).to_deque(5)
 
         self.assertIsInstance(ret, deque)
-        self.assertSequenceEqual(ret, [95, 96, 97, 98, 99])
+        self.assertSequenceEqual([95, 96, 97, 98, 99], ret)
