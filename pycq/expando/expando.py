@@ -8,6 +8,9 @@ class Expando(Namespace):
     def __setattr__(self, key, value):
         raise AttributeError("attribute '{0}' of 'Expando' objects is not writable".format(key))
 
+    def __delattr__(self, key):
+        raise AttributeError("attribute '{0}' of 'Expando' objects is not writable".format(key))
+
     def __str__(self):
         return "Expando({0})".format(
             ", ".join(
