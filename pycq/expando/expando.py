@@ -5,6 +5,11 @@ except ImportError:
 
 
 class Expando(Namespace):
+    def __with__(self, **attrib):
+        new_attrib = self.__dict__.copy()
+        new_attrib.update(attrib)
+        return Expando(**new_attrib)
+
     def __setattr__(self, key, value):
         raise AttributeError("attribute '{0}' of 'Expando' objects is not writable".format(key))
 

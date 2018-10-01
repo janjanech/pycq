@@ -33,3 +33,9 @@ class ExpandoObject(unittest.TestCase):
             del obj.attr1
 
         self.assertRaises(AttributeError, foo)
+
+    def test_with(self):
+        obj = Expando(attr1=5).__with__(attr2=8)
+
+        self.assertEqual(5, obj.attr1)
+        self.assertEqual(8, obj.attr2)
