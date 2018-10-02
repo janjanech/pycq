@@ -19,7 +19,7 @@ class Expando(Namespace):
     def __str__(self):
         return "Expando({0})".format(
             ", ".join(
-                "{0}={1!r}".format(name, value) for name, value in self.__dict__.items() if not name.startswith('_')
+                "{0}={1!r}".format(name, value) for name, value in self.__dict__.items()
             )
         )
 
