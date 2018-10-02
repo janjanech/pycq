@@ -5,10 +5,13 @@ except ImportError:
 
 
 class Expando(Namespace):
-    def __with__(self, **attrib):
+    def _replace(self, **attrib):
         new_attrib = self.__dict__.copy()
         new_attrib.update(attrib)
         return Expando(**new_attrib)
+
+    def _asdict(self):
+        return self.__dict__.copy()
 
     def __setattr__(self, key, value):
         raise AttributeError("attribute '{0}' of 'Expando' objects is not writable".format(key))
