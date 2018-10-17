@@ -1,8 +1,11 @@
-from collections import Iterable, Iterator
-from itertools import repeat, count
+from collections import Iterable, Iterator, namedtuple, Mapping
+from itertools import repeat, count, starmap
 
 from pycq.iterable import IterableHelper, IterableQuery
 from pycq.interfaces import Queryable
+
+
+KeyValue = namedtuple('KeyValue', ['key', 'value'])
 
 
 class QFunction:
@@ -12,6 +15,8 @@ class QFunction:
     def __call__(self, collection):
         if isinstance(collection, Queryable):
             return collection.__query__()
+        elif isinstance(collection, Mapping):
+            return IterableQuery(starmap(KeyValue, collection.items()))
         elif isinstance(collection, Iterable):
             return IterableQuery(collection)
         elif isinstance(collection, Iterator):

@@ -1,11 +1,32 @@
-from typing import Union, TypeVar, Iterable, Iterator, Optional, Any, AnyStr, Callable
+from typing import TypeVar, Iterable, Iterator, Optional, Any, AnyStr, Callable, overload, Mapping, Generic
 
 from pycq.interfaces import Query, Queryable
 
 T = TypeVar('T')
+TKey = TypeVar('TKey')
+TValue = TypeVar('TValue')
+
+
+class KeyValue(Generic[TKey, TValue]):
+    @property
+    def key(self) -> TKey: ...
+
+    @property
+    def value(self) -> TValue: ...
+
 
 class Q:
-    def __new__(cls, collection: Union[Queryable[T], Iterable[T], Iterator[T]]) -> Query[T]: ...
+    @overload
+    def __new__(cls, collection: Queryable[T]) -> Query[T]: ...
+
+    @overload
+    def __new__(cls, collection: Mapping[TKey, TValue]) -> Query[KeyValue[TKey, TValue]]: ...
+
+    @overload
+    def __new__(cls, collection: Iterable[T]) -> Query[T]: ...
+
+    @overload
+    def __new__(cls, collection: Iterator[T]) -> Query[T]: ...
 
     @staticmethod
     def empty() -> Query[Any]: ...
