@@ -64,7 +64,7 @@ categories = Q(products)\
     .group_by(lambda p: p.category)\
     .select(lambda g: Expando(
         category=g.key,
-        most_expansive_products=g.items.having_max(lambda p: p.unit_price)
+        most_expansive_products=Q(g.items).having_max(lambda p: p.unit_price)
     ))
 ```
 

@@ -387,12 +387,12 @@ class IterableQuery(SortingQuery):
         for item in self.__iterable:
             result.setdefault(key_selector(item), []).append(item)
 
-        return IterableQuery(GroupedItems(key, IterableQuery(items)) for key, items in result.items())
+        return IterableQuery(starmap(GroupedItems, result.items()))
 
     def group_by_ordered(self, key_selector):
         result = groupby(self.__iterable, key_selector)
 
-        return IterableQuery(GroupedItems(key, IterableQuery(items)) for key, items in result)
+        return IterableQuery(starmap(GroupedItems, result))
 
     def reverse(self):
         if hasattr(self.__iterable, '__reversed__'):  # ABC Reversible is not available till python 3.6
