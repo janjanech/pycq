@@ -34,19 +34,19 @@ class IterableQuery(SortingQuery):
             return reduce(func_or_initializer, self.__iterable)
 
     def select(self, selector):
-        return IterableQuery(selector(i) for i in self.__iterable)
+        return IterableQuery(map(selector, self.__iterable))
 
     def select_many(self, selector):
-        return IterableQuery(chain.from_iterable(selector(i) for i in self.__iterable))
+        return IterableQuery(chain.from_iterable(map(selector, self.__iterable)))
 
     def chain(self):
         return IterableQuery(chain.from_iterable(self.__iterable))
 
     def where(self, condition):
-        return IterableQuery(i for i in self.__iterable if condition(i))
+        return IterableQuery(filter(condition, self.__iterable))
 
     def cast(self, type):
-        return IterableQuery(type(i) for i in self.__iterable)
+        return IterableQuery(map(type, self.__iterable))
 
     def of_type(self, type):
         # noinspection PyTypeHints
@@ -138,7 +138,7 @@ class IterableQuery(SortingQuery):
         if selector is None:
             return sum(self.__iterable)
         else:
-            return sum(selector(i) for i in self.__iterable)
+            return sum(map(selector, self.__iterable))
 
     def average(self, selector=None):
         current_sum = 0
@@ -159,7 +159,7 @@ class IterableQuery(SortingQuery):
         if selector is None:
             return min(self.__iterable)
         else:
-            return min(selector(i) for i in self.__iterable)
+            return min(map(selector, self.__iterable))
 
     def having_min(self, selector):
         min_value = None
@@ -182,7 +182,7 @@ class IterableQuery(SortingQuery):
         if selector is None:
             return max(self.__iterable)
         else:
-            return max(selector(i) for i in self.__iterable)
+            return max(map(selector, self.__iterable))
 
     def having_max(self, selector):
         max_value = None
@@ -322,10 +322,10 @@ class IterableQuery(SortingQuery):
                 return True
             return False
         else:
-            return any(condition(i) for i in self.__iterable)
+            return any(map(condition, self.__iterable))
 
     def all(self, condition):
-        return all(condition(i) for i in self.__iterable)
+        return all(map(condition, self.__iterable))
 
     def contains(self, value):
         for i in self.__iterable:
